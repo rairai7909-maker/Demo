@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>किसान सुरक्षा</title>
+    <style>
+        :root {
+            --primary-green: #2e7d32;
+            --light-green: #e8f5e9;
+            --accent-orange: #ff6f00;
+            --text-dark: #212121;
+            --text-light: #757575;
+            --white: #ffffff;
+            --shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f5f5f5;
+            color: var(--text-dark);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header Styling Updated for Logo */
+        header {
+            background-color: var(--primary-green);
+            color: var(--white);
+            padding: 10px 15px;
+            text-align: center;
+            box-shadow: var(--shadow);
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px; /* Space between logo and text */
+        }
+
+        .app-logo {
+            height: 40px; /* Adjust size as needed */
+            width: auto;
+            border-radius: 5px;
+            background: white; /* Fallback if transparent */
+        }
+
+        header h1 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin: 0;
+        }
+
+        /* Main Container */
+        main {
+            flex: 1;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+            background: #fff;
+        }
+
+        /* Sections */
+        .screen {
+            display: none;
+            width: 100%;
+            height: 100%;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .screen.active {
+            display: flex;
+        }
+
+        /* --- LANDING PAGE STYLES --- */
+        .hero-section {
+            text-align: center;
+            padding: 20px 0;
+            width: 100%;
+        }
+
+        .hero-title {
+            color: var(--primary-green);
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+
+        .hero-desc {
+            color: var(--text-light);
+            margin-bottom: 25px;
+            font-size: 0.95rem;
+        }
+
+        .faq-container {
+            width: 100%;
+            margin-top: 20px;
+            text-align: left;
+        }
+
+        details {
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        summary {
+            background: var(--light-green);
+            padding: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            color: var(--primary-green);
+            list-style: none;
+            position: relative;
+        }
+
+        summary::after {
+            content: '+';
+            position: absolute;
+            right: 15px;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        details[open] summary::after {
+            content: '-';
+        }
+
+        .faq-answer {
+            padding: 15px;
+            color: var(--text-dark);
+            line-height: 1.5;
+            font-size: 0.9rem;
+            border-top: 1px solid #eee;
+        }
+
+        /* CEO / Expert Section Styling */
+        .ceo-section {
+            margin-top: 30px;
+            text-align: center;
+            padding: 30px 15px;
+            background: linear-gradient(to bottom, #f1f8e9, #fff);
+            border: 1px solid #c5e1a5;
+            border-radius: 16px;
+            width: 100%;
+            margin-bottom: 50px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+
+        .ceo-img {
+            width: 100%;
+            max-width: 400px;
+            height: auto;
+            border-radius: 20px;
+            object-fit: cover;
+            margin-bottom: 20px;
+            background-color: #ddd;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+        }
+
+        .ceo-name {
+            font-weight: 700;
+            font-size: 1.4rem;
+            color: var(--primary-green);
+            margin-bottom: 5px;
+        }
+
+        .ceo-badge {
+            background-color: var(--accent-orange);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 25px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            display: inline-block;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .ceo-bio {
+            color: var(--text-dark);
+            font-size: 1rem;
+            font-style: italic;
+            line-height: 1.5;
+            opacity: 0.9;
+            padding: 0 10px;
+        }
+
+        /* Camera View */
+        #camera-container {
+            width: 100%;
+            height: 60vh;
+            background: #000;
+            border-radius: 12px;
+            overflow: hidden;
+            position: relative;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        video, #captured-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        #captured-image {
+            display: none;
+        }
+
+        /* Controls */
+        .controls {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            padding-bottom: 20px;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        button {
+            border: none;
+            border-radius: 50px;
+            padding: 15px 30px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.1s;
+            box-shadow: var(--shadow);
+            width: 100%;
+        }
+
+        button:active {
+            transform: scale(0.98);
+        }
+
+        .btn-primary {
+            background-color: var(--primary-green);
+            color: white;
+            padding: 18px 30px;
+            font-size: 1.1rem;
+        }
+
+        .btn-secondary {
+            background-color: var(--white);
+            color: var(--primary-green);
+            border: 2px solid var(--primary-green);
+        }
+
+        .btn-action {
+            background-color: var(--accent-orange);
+            color: white;
+            font-size: 1.1rem;
+        }
+
+        /* Loading Spinner */
+        #loading-screen {
+            justify-content: center;
+            text-align: center;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid var(--light-green);
+            border-top: 5px solid var(--primary-green);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .ai-notice {
+            font-size: 0.8rem;
+            color: #888;
+            margin-top: 10px;
+            background: rgba(0,0,0,0.05);
+            padding: 5px 10px;
+            border-radius: 4px;
+        }
+
+        /* Results Section */
+        .result-card {
+            background: white;
+            width: 100%;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .result-title {
+            font-size: 1.2rem;
+            color: var(--primary-green);
+            margin-bottom: 10px;
+            border-bottom: 2px solid var(--light-green);
+            padding-bottom: 5px;
+        }
+
+        .diagnosis-content ul {
+            padding-left: 20px;
+            line-height: 1.6;
+        }
+
+        .diagnosis-content li {
+            margin-bottom: 8px;
+        }
+
+        /* Marketing Section */
+        .marketing-box {
+            background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
+            border: 2px solid var(--accent-orange);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            width: 100%;
+            margin-top: 20px;
+            box-shadow: var(--shadow);
+        }
+
+        .marketing-text {
+            font-size: 1rem;
+            color: #d84315;
+            margin-bottom: 15px;
+            font-weight: 500;
+            line-height: 1.5;
+        }
+
+        .shop-btn {
+            background-color: #d84315;
+            color: white;
+            text-decoration: none;
+            display: inline-block;
+            padding: 12px 24px;
+            border-radius: 25px;
+            font-weight: bold;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            animation: pulse 2s infinite;
+        }
+
+        /* Error/Info Messages */
+        .message-box {
+            padding: 20px;
+            background-color: #ffebee;
+            color: #c62828;
+            border-radius: 8px;
+            text-align: center;
+            margin-top: 20px;
+            display: none;
+        }
+
+        /* Hidden File Input */
+        #file-input {
+            display: none;
+        }
+
+        /* --- POPUP MODAL CSS --- */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 100;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-box {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            animation: popIn 0.3s ease;
+        }
+
+        @keyframes popIn {
+            from { transform: scale(0.8); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .modal-title {
+            color: var(--primary-green);
+            font-size: 1.4rem;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #555;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        .input-field:focus {
+            border-color: var(--primary-green);
+            outline: none;
+        }
+
+        .btn-go {
+            background: var(--accent-orange);
+            color: white;
+            width: 100%;
+            font-size: 1.2rem;
+            margin-top: 10px;
+        }
+        
+        .close-modal {
+            margin-top: 15px;
+            color: #777;
+            text-decoration: underline;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <img src="https://i.ibb.co/N6TCx6NB/IMG-20260116-120014.jpg" alt="Logo" class="app-logo">
+        <h1>किसान सुरक्षा</h1>
+    </header>
+
+    <main>
+        <div id="landing-screen" class="screen active">
+            <div class="hero-section">
+                <h2 class="hero-title">नमस्ते किसान भाई! 🙏</h2>
+                <p class="hero-desc">क्या आपकी फसल में कोई बीमारी लग गयी है? चिंता न करें, AI और विशेषज्ञ की मदद से तुरंत जांच करें।</p>
+                <button class="btn-primary" onclick="startApp()">📸 फोटो खींचकर बीमारी देखें</button>
+            </div>
+
+            <div class="faq-container">
+                <details>
+                    <summary>यह वेबसाइट क्यों बनाई गई है?</summary>
+                    <div class="faq-answer">हमारा उद्देश्य किसान भाइयों की मदद करना है। यह वेबसाइट AI तकनीक और हमारे कृषि अनुभव का उपयोग करके आपकी फसल की बीमारी को तुरंत पहचानती है।</div>
+                </details>
+                <details>
+                    <summary>अगर बीमारी मिले तो दवाई कहाँ से लें?</summary>
+                    <div class="faq-answer">बाजार में बहुत सी नकली दवाइयां बिक रही हैं। अगर आप अपनी फसल को बचाना चाहते हैं, तो <strong>सिर्फ और सिर्फ हमारी दुकान (शॉप)</strong> से ही दवाई खरीदें।</div>
+                </details>
+                <details>
+                    <summary>यहाँ से दवाई लेने के क्या फायदे हैं?</summary>
+                    <div class="faq-answer">
+                        <ul>
+                            <li>✅ 100% ओरिजिनल (असली) कंपनी का माल।</li>
+                            <li>✅ फसल के रोग के हिसाब से बिल्कुल सटीक दवाई।</li>
+                            <li>✅ बाजार से उचित दाम।</li>
+                            <li>✅ गोपाल जी भाईसाब (कृषि विशेषज्ञ) द्वारा मुफ्त सलाह।</li>
+                        </ul>
+                    </div>
+                </details>
+                <details>
+                    <summary>दुकान का पता (Address) क्या है?</summary>
+                    <div class="faq-answer" style="font-weight: bold; color: var(--primary-green);">
+                        📍 पता:<br>Main Road Badayala Mataji,<br>Tahasil Piploda, Jila Ratlam,<br>State Madhya Pradesh.
+                    </div>
+                </details>
+            </div>
+
+            <div class="ceo-section">
+                <img src="https://firebasestorage.googleapis.com/v0/b/go-play-b8c0c.appspot.com/o/Storege%2FIMG_20260116_101546.jpg?alt=media&token=7f9729dc-c92c-4233-b51f-74a53449cf63" alt="Gopal Dhangar" class="ceo-img">
+                <div class="ceo-name">गोपाल धनगर (Gopal Dhangar)</div>
+                <div class="ceo-badge">👨‍🌾 कृषि विशेषज्ञ (Agriculture Expert)</div>
+                <p class="ceo-bio">"फसलों की हर बीमारी का सही इलाज और सही सलाह। हमारा अनुभव और आपकी मेहनत, लाएगी फसल में बरकत।"</p>
+            </div>
+        </div>
+
+        <div id="capture-screen" class="screen">
+            <div id="camera-container">
+                <video id="video-feed" autoplay playsinline muted></video>
+                <img id="captured-image" alt="Captured Crop">
+            </div>
+            <div class="controls">
+                <div id="initial-controls" class="btn-group">
+                    <button class="btn-primary" onclick="capturePhoto()">📷 फोटो खींचें</button>
+                    <button class="btn-secondary" onclick="triggerFileUpload()">🖼️ गैलरी से चुनें</button>
+                </div>
+                <div id="review-controls" class="btn-group" style="display:none;">
+                    <button class="btn-secondary" onclick="retakePhoto()">🔄 दोबारा लें</button>
+                    <button class="btn-action" onclick="goToAnalysis()">✅ आगे बढ़ें (Next)</button>
+                </div>
+            </div>
+            <input type="file" id="file-input" accept="image/*" onchange="handleFileUpload(event)">
+            <canvas id="canvas" style="display:none;"></canvas>
+            <button class="btn-secondary" onclick="location.reload()" style="margin-top:10px;">🏠 वापस जाएं</button>
+        </div>
+
+        <div id="loading-screen" class="screen">
+            <div class="spinner"></div>
+            <h3>फसल की जांच हो रही है...</h3>
+            <p>कृपया प्रतीक्षा करें</p>
+            <div class="ai-notice">✨ Image Analysis Powered by Agent</div>
+        </div>
+
+        <div id="result-screen" class="screen">
+            <div id="error-message" class="message-box"></div>
+            <div id="diagnosis-section" class="result-card" style="display:none;">
+                <h2 class="result-title">🔍 समस्या का विवरण (Problem Details)</h2>
+                <div id="diagnosis-content" class="diagnosis-content"></div>
+            </div>
+            <div id="solution-section" class="marketing-box" style="display:none;">
+                <h2 class="result-title" style="border-color: #d84315; color: #d84315;">💊 समाधान (Solution)</h2>
+                <div class="marketing-text">
+                    <p>रोग की असली दवा लेने के लिए हमारी शॉप पर संपर्क करें।</p>
+                    <p>बाजार में नकली दवाओं से बचें। हम 100% जेन्युइन प्रोडक्ट देते हैं।</p>
+                    <p><strong>📍 पता: Main Road Badayala Mataji, Ratlam (MP)</strong></p>
+                </div>
+                <button onclick="openModal()" class="shop-btn">दवाई लेने के लिए यहाँ क्लिक करें</button>
+            </div>
+            <button class="btn-secondary" style="margin-top: 20px;" onclick="location.reload()">🏠 होम पर जाएँ</button>
+        </div>
+    </main>
+
+    <div id="contact-modal" class="modal-overlay">
+        <div class="modal-box">
+            <div class="modal-title">📞 संपर्क करें</div>
+            <div class="input-group">
+                <label>आपका नाम (Name)</label>
+                <input type="text" id="user-name" class="input-field" placeholder="अपना नाम लिखें...">
+            </div>
+            <div class="input-group">
+                <label>मोबाइल नंबर (Mobile)</label>
+                <input type="tel" id="user-mobile" class="input-field" placeholder="10 अंकों का नंबर...">
+            </div>
+            <button class="btn-primary btn-go" onclick="submitForm()">🚀 GO</button>
+            <div class="close-modal" onclick="closeModal()">रद्द करें (Cancel)</div>
+        </div>
+    </div>
+
+    <script>
+        // ==========================================
+        // ⚠️ SETUP CONFIGURATION
+        // ==========================================
+        // 1. यहाँ अपनी Gemini API Key डालें
+        const GEMINI_API_KEY = 'AIzaSyDIEV0sHlWIP1dld5z-AjUj8dcTylylZmI'; 
+        
+        // 2. आपके द्वारा दिए गए Telegram क्रेडेंशियल्स
+        const TELEGRAM_BOT_TOKEN = '8140645281:AAHDAEf80ks5rm16KOPyNcxbNqYR6gP-DIY'; 
+        const TELEGRAM_CHAT_ID = '5961130033'; 
+        
+        // ==========================================
+        // APP LOGIC
+        // ==========================================
+        const video = document.getElementById('video-feed');
+        const capturedImage = document.getElementById('captured-image');
+        const canvas = document.getElementById('canvas');
+        const fileInput = document.getElementById('file-input');
+        
+        let stream = null;
+        let finalImageBase64 = null;
+        let latestDiagnosisText = ""; // AI का जवाब सेव करने के लिए
+
+        function startApp() {
+            document.getElementById('landing-screen').classList.remove('active');
+            document.getElementById('capture-screen').classList.add('active');
+            initCamera(); 
+        }
+
+        async function initCamera() {
+            try {
+                stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } });
+                video.srcObject = stream;
+            } catch (err) {
+                alert("कैमरा चालू नहीं हो सका। कृपया अनुमति दें या गैलरी का उपयोग करें।");
+            }
+        }
+
+        function capturePhoto() {
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            canvas.getContext('2d').drawImage(video, 0, 0);
+            showPreview(canvas.toDataURL('image/jpeg', 0.8));
+        }
+
+        function triggerFileUpload() { fileInput.click(); }
+        
+        function handleFileUpload(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = e => showPreview(e.target.result);
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function showPreview(dataUrl) {
+            finalImageBase64 = dataUrl;
+            video.style.display = 'none';
+            capturedImage.src = dataUrl;
+            capturedImage.style.display = 'block';
+            document.getElementById('initial-controls').style.display = 'none';
+            document.getElementById('review-controls').style.display = 'flex';
+        }
+
+        function retakePhoto() {
+            finalImageBase64 = null;
+            capturedImage.style.display = 'none';
+            video.style.display = 'block';
+            document.getElementById('review-controls').style.display = 'none';
+            document.getElementById('initial-controls').style.display = 'flex';
+        }
+
+        function goToAnalysis() {
+            document.getElementById('capture-screen').classList.remove('active');
+            document.getElementById('loading-screen').classList.add('active');
+            if (stream) stream.getTracks().forEach(track => track.stop());
+            performAIAnalysis();
+        }
+
+        // ==========================================
+        // AI LOGIC
+        // ==========================================
+        async function performAIAnalysis() {
+            if (!finalImageBase64) return alert("फोटो नहीं मिली");
+
+            const modelName = 'gemini-robotics-er-1.5-preview';
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${GEMINI_API_KEY}`;
+            
+            const promptText = `You are an agricultural expert. Verify if image is crop/plant. If not return "NOT_CROP_ERROR". If yes, diagnose disease in PURE HINDI bullets. No medicine names.`;
+
+            try {
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        contents: [{
+                            parts: [
+                                { text: promptText },
+                                { inline_data: { mime_type: "image/jpeg", data: finalImageBase64.split(',')[1] } }
+                            ]
+                        }]
+                    })
+                });
+
+                if (!response.ok) throw new Error("API Error");
+                const data = await response.json();
+                const text = data.candidates[0].content.parts[0].text;
+                
+                handleAIResult(text);
+            } catch (error) {
+                showResultScreen(false, "सर्वर एरर: " + error.message);
+            }
+        }
+
+        function handleAIResult(text) {
+            if (text.includes("NOT_CROP_ERROR")) {
+                showResultScreen(false, "कृपया सिर्फ फसल की फोटो लें।");
+            } else {
+                // सेव करें ताकि WhatsApp/Telegram पर भेजा जा सके
+                // (अतिरिक्त सितारे * हटा रहे हैं ताकि मैसेज साफ़ दिखे)
+                latestDiagnosisText = text.replace(/\*/g, '').trim();
+
+                let html = text.replace(/\*/g, '•').split('\n').map(l => l.trim().length > 0 ? `<p>${l}</p>` : '').join('');
+                showResultScreen(true, html);
+            }
+        }
+
+        function showResultScreen(success, content) {
+            document.getElementById('loading-screen').classList.remove('active');
+            document.getElementById('result-screen').classList.add('active');
+            if (success) {
+                document.getElementById('diagnosis-content').innerHTML = content;
+                document.getElementById('diagnosis-section').style.display = 'block';
+                document.getElementById('solution-section').style.display = 'block';
+                document.getElementById('error-message').style.display = 'none';
+            } else {
+                document.getElementById('error-message').innerText = content;
+                document.getElementById('error-message').style.display = 'block';
+            }
+        }
+
+        // ==========================================
+        // MODAL & SUBMIT LOGIC
+        // ==========================================
+        function openModal() {
+            document.getElementById('contact-modal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('contact-modal').style.display = 'none';
+        }
+
+        async function submitForm() {
+            const name = document.getElementById('user-name').value.trim();
+            const mobile = document.getElementById('user-mobile').value.trim();
+
+            if (!name || !mobile) {
+                alert("कृपया अपना नाम और नंबर भरें।");
+                return;
+            }
+
+            // Button Loading State
+            const btn = document.querySelector('.btn-go');
+            btn.innerText = "Processing...";
+            btn.disabled = true;
+
+            // 1. Send to Telegram (With AI Diagnosis)
+            if (TELEGRAM_BOT_TOKEN && TELEGRAM_CHAT_ID && finalImageBase64) {
+                try {
+                    await sendToTelegram(name, mobile, latestDiagnosisText, finalImageBase64);
+                } catch (e) {
+                    console.error("Telegram send failed", e);
+                }
+            }
+
+            // 2. Open WhatsApp (With AI Diagnosis)
+            const waNumber = "916264699580";
+            // मैसेज में "🚫 Problem :" जोड़ा गया है
+            const message = `नमस्ते, मेरा नाम ${name} है (Mobile: ${mobile})।\n\n🚫 Problem : ${latestDiagnosisText}\n\nमैंने फसल की फोटो भेजी है, मुझे दवाई चाहिए।`;
+            
+            const waURL = `https://wa.me/${waNumber}?text=${encodeURIComponent(message)}`;
+            
+            // Redirect
+            window.location.href = waURL;
+        }
+
+        // Telegram Sender
+        async function sendToTelegram(name, mobile, diagnosis, base64) {
+            const blob = await (await fetch(base64)).blob();
+            const formData = new FormData();
+            formData.append("chat_id", TELEGRAM_CHAT_ID);
+            formData.append("photo", blob, "crop.jpg");
+            
+            // Telegram Caption में भी AI Problem जोड़ दिया है
+            const captionText = `🌱 New Crop Query\n👤 Name: ${name}\n📱 Mobile: ${mobile}\n\n🚫 Problem : ${diagnosis}`;
+            
+            formData.append("caption", captionText);
+
+            await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendPhoto`, {
+                method: 'POST',
+                body: formData
+            });
+        }
+    </script>
+</body>
+</html>
